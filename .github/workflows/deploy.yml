@@ -32,14 +32,9 @@ jobs:
         run: |
           pnpm build
 
-      - name: Copy output to deploy folder
-        run: |
-          mkdir deploy
-          cp -r dist/client/* deploy/
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/master'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./deploy
+          publish_dir: ./dist/client

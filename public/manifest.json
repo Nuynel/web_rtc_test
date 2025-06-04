@@ -1,0 +1,8 @@
+{
+  "name":"WebRTC_test",
+  "short_name":"WebRTC_test",
+  "icons": [],
+  "theme_color":"#ffffff",
+  "background_color":"#ffffff",
+  "display":"standalone"
+}

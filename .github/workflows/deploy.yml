@@ -6,7 +6,10 @@ on:
       - master
 
 permissions:
-  contents: write
+  permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:

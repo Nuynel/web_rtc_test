@@ -31,13 +31,11 @@ jobs:
       - name: Build and prerender
         run: |
           pnpm build
-          pnpm prerender
 
       - name: Copy output to deploy folder
         run: |
           mkdir deploy
           cp -r dist/client/* deploy/
-          cp -r dist/prerendered/* deploy/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

@@ -4,7 +4,7 @@ import vike from 'vike/plugin'
 import { UserConfig } from 'vite'
 
 const config: UserConfig = {
-  // base: '/web_rtc_test/',
+  base: '/web_rtc_test/',
   // base: '',
   plugins: [
     react(),

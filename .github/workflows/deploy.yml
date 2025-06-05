@@ -31,8 +31,9 @@ jobs:
         run: pnpm install
 
       - name: Build and prerender
-        run: |
-          pnpm build
+        run: pnpm build
+        env:
+          BASE_URL: /web_rtc_test/
 
       - name: Upload static files as artifact
         id: deployment

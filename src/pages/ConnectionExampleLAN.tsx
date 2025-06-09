@@ -90,7 +90,7 @@ const ManualWebRTC = () => {
   const attachMediaToPeerConnection = () => {
     if (!peerConnectionRef.current) return console.error('RTCPeerConnection is not created');
     if (!localStreamRef.current) return console.error('LocalMediaStream is not captured');
-    localStreamRef.current.getTracks().forEach(track => peerConnectionRef.current?.addTrack(track));
+    localStreamRef.current.getTracks().forEach(track => localStreamRef.current && peerConnectionRef.current?.addTrack(track, localStreamRef.current));
     setPcTrackState(true)
     console.log('LocalMediaStream successfully attached to RTCPeerConnection');
   }

@@ -58,6 +58,12 @@ const ManualWebRTC = () => {
     //////// peerConnectionRef.current.ontrack = handleTrackChange
     peerConnectionRef.current.onsignalingstatechange = handleSignalingStateChange
     peerConnectionRef.current.onicecandidate = handleLocalCandidatesGathering;
+    peerConnectionRef.current.ontrack = (event) => {
+      console.log('📡 ontrack, получен поток:', event.streams[0]);
+      if (remoteMediaRef.current) {
+        remoteMediaRef.current.srcObject = event.streams[0];
+      }
+    };
     
     peerConnectionRef.current.ondatachannel = (event) => {
       const dc = event.channel;
@@ -129,7 +135,7 @@ const ManualWebRTC = () => {
     try {
       await peerConnectionRef.current.setRemoteDescription({sdp: sdpRemoteDescription, type: sdpRemoteDescriptionType})
     } catch (e) {
-      console.error('Error while attaching Remote SDP offer >>> ', e);
+      return console.error('Error while attaching Remote SDP offer >>> ', e);
     }
     console.log('Remote SDP Offer successfully attached')
   }
@@ -332,12 +338,21 @@ const ManualWebRTC = () => {
       
       <div>
         <div>
-          <h3 className="font-medium">Local</h3>
+          <h3 className="font-medium">Local video</h3>
           <video
             ref={localMediaRef}
             autoPlay
             playsInline
             muted
+            className="rounded w-full border"
+          />
+        </div>
+        <div>
+          <h3 className="font-medium">Remote video</h3>
+          <video
+            ref={remoteMediaRef}
+            autoPlay
+            playsInline
             className="rounded w-full border"
           />
         </div>

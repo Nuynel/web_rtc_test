@@ -39,7 +39,8 @@ const ManualWebRTC = () => {
     sendMessage
   } = useWebRTC()
   
-  const {sendWSMessage, isOpen, personalId, sdpIncomingMessage} = useWebSocket('ws://localhost:8000/signaling')
+  const {sendWSMessage, isOpen, personalId, sdpIncomingMessage} = useWebSocket('wss://vududu.com:443/signaling')
+  // const {sendWSMessage, isOpen, personalId, sdpIncomingMessage} = useWebSocket('wss://localhost:8000/signaling')
   
   const [isRecipientDevice, setIsRecipientDevice] = useState(false);
   const [targetId, setTargetId] = useState<string>('');

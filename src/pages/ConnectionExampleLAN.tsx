@@ -1,9 +1,10 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import useWebRTC from "#root/src/pages/hooks/useWebRTC";
 import Video from "#root/src/pages/components/ui/Video";
 import RecipientUi from "#root/src/pages/components/RecipientUI";
 import CallersUI from "#root/src/pages/components/CallersUI";
 import SessionDescription from "#root/src/pages/components/ui/SessionDescription";
+import useWebSocket from "#root/src/pages/hooks/useWebSocket";
 
 // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity
 
@@ -38,11 +39,38 @@ const ManualWebRTC = () => {
     sendMessage
   } = useWebRTC()
   
+  const {sendWSMessage, isOpen, personalId, sdpIncomingMessage} = useWebSocket('ws://localhost:8000/signaling')
+  
   const [isRecipientDevice, setIsRecipientDevice] = useState(false);
+  const [targetId, setTargetId] = useState<string>('');
+  
+  const sendSdpMessage = () => {
+    sendWSMessage({
+      id: targetId,
+      type: sdpLocalDescriptionType as RTCSdpType,
+      description: sdpLocalDescription,
+    })
+  }
+  
+  useEffect(() => {
+    if (sdpIncomingMessage) {
+      const {description, type, id} = sdpIncomingMessage
+      if (description) {
+        setTargetId(id)
+        setSdpRemoteDescription(description)
+        setSdpRemoteDescriptionType(type as RTCSdpType)
+      }
+    }
+  }, [sdpIncomingMessage])
   
   return (
     <div className='flex w-screen h-screen justify-around gap-8'>
       <div className='flex flex-col gap-4'>
+        
+        <div>
+          Is WebSocket Open: {isOpen ? 'open' : 'close'}; Personal ID: {personalId}
+          <button onClick={sendSdpMessage}>Send test message</button>
+        </div>
         <div>
           <input
             checked={startAudio}
@@ -71,6 +99,16 @@ const ManualWebRTC = () => {
             aria-label='recipient'
           />
           <label aria-label='recipient'>I'm recipient</label>
+        </div>
+        
+        <div>
+          <input
+            value={targetId}
+            onChange={e => setTargetId(e.target.value)}
+            readOnly={isRecipientDevice}
+            aria-label='targetId'
+          />
+          <label aria-label='targetId'>Target ID</label>
         </div>
         
         <div className='flex flex-col gap-4'>

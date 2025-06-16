@@ -61,6 +61,10 @@ const useWebRTC = () => {
       dc.onopen = () => console.log("✅ Открыт dataChannel на стороне реципиента");
       dc.onmessage = (e) => console.log("📩 Сообщение:", e.data);
     };
+    
+    return () => {
+      peerConnectionRef.current?.close();
+    }
   }, [])
   
   // 1. The caller captures local Media via MediaDevices.getUserMedia

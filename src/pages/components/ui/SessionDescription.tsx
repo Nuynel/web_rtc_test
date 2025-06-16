@@ -42,37 +42,15 @@ const SessionDescription = (
     </div>
     <div className='flex flex-col'>
       SDP Remote Description Type:
-      <div>
-        <input
-          type="checkbox"
-          checked={sdpRemoteDescriptionType === 'answer'}
-          onChange={e => setSdpRemoteDescriptionType('answer')}
-        />Answer
-      </div>
-      
-      <div>
-        <input
-          type="checkbox"
-          checked={sdpRemoteDescriptionType === 'offer'}
-          onChange={e => setSdpRemoteDescriptionType('offer')}
-        />Offer
-      </div>
-      
-      <div>
-        <input
-          type="checkbox"
-          checked={sdpRemoteDescriptionType === 'pranswer'}
-          onChange={e => setSdpRemoteDescriptionType('pranswer')}
-        />Pranswer
-      </div>
-      
-      <div>
-        <input
-          type="checkbox"
-          checked={sdpRemoteDescriptionType === 'rollback'}
-          onChange={e => setSdpRemoteDescriptionType('rollback')}
-        />Rollback
-      </div>
+      <select
+        value={sdpRemoteDescriptionType}
+        onChange={(e) => setSdpRemoteDescriptionType(e.target.value as RTCSdpType)}
+      >
+        <option value="offer">Offer</option>
+        <option value="answer">Answer</option>
+        <option value="pranswer">Pranswer</option>
+        <option value="rollback">Rollback</option>
+      </select>
     
     </div>
     <div>

@@ -4,7 +4,7 @@ type Props = {
   
   getUserMedia: () => Promise<void>
   attachMediaToPeerConnection: () => void
-  copySDPOffer: () => Promise<void>
+  sendSDPOffer: () => void
   attachRemoteSDPOffer: () => Promise<void>
   createSDPAnswer: () => Promise<void>
 }
@@ -16,7 +16,7 @@ const RecipientUi = (
     
     getUserMedia,
     attachMediaToPeerConnection,
-    copySDPOffer,
+    sendSDPOffer,
     attachRemoteSDPOffer,
     createSDPAnswer,
   }: Props
@@ -45,10 +45,10 @@ const RecipientUi = (
     >4) Create SDP answer</button>
     
     <button
-      onClick={copySDPOffer}
+      onClick={sendSDPOffer}
       disabled={!sdpLocalDescription}
       className='disabled:opacity-50'
-    >5) Copy SDP answer</button>
+    >5) Send SDP answer</button>
   </div>
 )
 

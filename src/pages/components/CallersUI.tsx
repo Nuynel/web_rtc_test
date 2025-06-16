@@ -7,7 +7,7 @@ type Props = {
   attachMediaToPeerConnection: () => void
   createDataChannel: () => void
   createSDPOffer: () => Promise<void>
-  copySDPOffer: () => Promise<void>
+  sendSDPOffer: () => void
   attachRemoteSDPOffer: () => Promise<void>
   sendMessage: () => void
 }
@@ -22,7 +22,7 @@ const CallersUI = (
     attachMediaToPeerConnection,
     createDataChannel,
     createSDPOffer,
-    copySDPOffer,
+    sendSDPOffer,
     attachRemoteSDPOffer,
     sendMessage,
   }: Props
@@ -49,10 +49,10 @@ const CallersUI = (
     >4) Create SDP offer</button>
     
     <button
-      onClick={copySDPOffer}
+      onClick={sendSDPOffer}
       disabled={!sdpLocalDescription}
       className='disabled:opacity-50'
-    >5) Copy SDP offer</button>
+    >5) Send SDP offer</button>
     
     <button
       onClick={attachRemoteSDPOffer}

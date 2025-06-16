@@ -70,7 +70,6 @@ const ManualWebRTC = () => {
         
         <div>
           Is WebSocket Open: {isOpen ? 'open' : 'close'}; Personal ID: {personalId}
-          <button onClick={sendSdpMessage}>Send test message</button>
         </div>
         <div>
           <input
@@ -119,7 +118,7 @@ const ManualWebRTC = () => {
               sdpRemoteDescription={sdpRemoteDescription}
               getUserMedia={getUserMedia}
               attachMediaToPeerConnection={attachMediaToPeerConnection}
-              copySDPOffer={copySDPOffer}
+              sendSDPOffer={sendSdpMessage}
               attachRemoteSDPOffer={attachRemoteSDPOffer}
               createSDPAnswer={createSDPAnswer}
             />
@@ -132,7 +131,7 @@ const ManualWebRTC = () => {
               attachMediaToPeerConnection={attachMediaToPeerConnection}
               createDataChannel={createDataChannel}
               createSDPOffer={createSDPOffer}
-              copySDPOffer={copySDPOffer}
+              sendSDPOffer={sendSdpMessage}
               attachRemoteSDPOffer={attachRemoteSDPOffer}
               sendMessage={sendMessage}
             />

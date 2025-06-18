@@ -6,6 +6,18 @@ const STATISTIC_TYPES = [
   'inbound-rtp', 'outbound-rtp', 'remote-inbound-rtp', 'remote-outbound-rtp'
 ] as const
 
+const iceServers = [
+  {
+    urls: [
+      "stun:vududu.com:3478", // обычный STUN
+      "turn:vududu.com:3478?transport=udp", // TURN UDP
+      "turn:vududu.com:5349?transport=tcp"  // TURN over TLS (если включите)
+    ],
+    username: "testuser",
+    credential: "testpassword"
+  }
+];
+
 const useWebRTC = () => {
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const localMediaStreamRef = useRef<MediaStream | null>(null);
@@ -53,7 +65,7 @@ const useWebRTC = () => {
   
   // 0. The caller creates RTCPeerConnection
   useEffect(() => {
-    const peerConnection = new RTCPeerConnection({ iceServers: [] });
+    const peerConnection = new RTCPeerConnection({ iceServers });
     peerConnectionRef.current = peerConnection;
     console.log('RTCPeerConnection instance was created in useEffect');
     

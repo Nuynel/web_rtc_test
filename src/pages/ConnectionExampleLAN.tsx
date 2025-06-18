@@ -56,6 +56,28 @@ const ManualWebRTC = () => {
     })
   }
   
+  const startCall = async () => {
+    try {
+      await getUserMedia()
+      attachMediaToPeerConnection()
+      createDataChannel()
+      await createSDPOffer()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  
+  const acceptCall = async () => {
+    try {
+      await attachRemoteSDPOffer()
+      await getUserMedia()
+      attachMediaToPeerConnection()
+      await createSDPAnswer()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  
   useEffect(() => {
     if (sdpIncomingMessage) {
       const { description, type, id } = sdpIncomingMessage
@@ -66,6 +88,14 @@ const ManualWebRTC = () => {
       }
     }
   }, [sdpIncomingMessage])
+  
+  useEffect(() => {
+    sendSdpMessage()
+  }, [sdpLocalDescription]);
+  
+  useEffect(() => {
+    if (!isRecipientDevice) attachRemoteSDPOffer().catch(e => console.error(e))
+  }, [sdpRemoteDescription]);
   
   const StatsBlock = () => {
     if (!statistics) return null
@@ -161,26 +191,28 @@ const ManualWebRTC = () => {
             <div className="mt-6">
               {isRecipientDevice ? (
                 <RecipientUi
-                  sdpLocalDescription={sdpLocalDescription}
+                  acceptCall={acceptCall}
+                  // sdpLocalDescription={sdpLocalDescription}
                   sdpRemoteDescription={sdpRemoteDescription}
-                  getUserMedia={getUserMedia}
-                  attachMediaToPeerConnection={attachMediaToPeerConnection}
-                  sendSDPOffer={sendSdpMessage}
-                  attachRemoteSDPOffer={attachRemoteSDPOffer}
-                  createSDPAnswer={createSDPAnswer}
+                  // getUserMedia={getUserMedia}
+                  // attachMediaToPeerConnection={attachMediaToPeerConnection}
+                  // sendSDPOffer={sendSdpMessage}
+                  // attachRemoteSDPOffer={attachRemoteSDPOffer}
+                  // createSDPAnswer={createSDPAnswer}
                 />
               ) : (
                 <CallersUI
-                  sdpLocalDescription={sdpLocalDescription}
-                  sdpRemoteDescription={sdpRemoteDescription}
-                  sdpRemoteDescriptionType={sdpRemoteDescriptionType}
-                  getUserMedia={getUserMedia}
-                  attachMediaToPeerConnection={attachMediaToPeerConnection}
-                  createDataChannel={createDataChannel}
-                  createSDPOffer={createSDPOffer}
-                  sendSDPOffer={sendSdpMessage}
-                  attachRemoteSDPOffer={attachRemoteSDPOffer}
-                  sendMessage={sendMessage}
+                  startCall={startCall}
+                  // sdpLocalDescription={sdpLocalDescription}
+                  // sdpRemoteDescription={sdpRemoteDescription}
+                  // sdpRemoteDescriptionType={sdpRemoteDescriptionType}
+                  // getUserMedia={getUserMedia}
+                  // attachMediaToPeerConnection={attachMediaToPeerConnection}
+                  // createDataChannel={createDataChannel}
+                  // createSDPOffer={createSDPOffer}
+                  // sendSDPOffer={sendSdpMessage}
+                  // attachRemoteSDPOffer={attachRemoteSDPOffer}
+                  // sendMessage={sendMessage}
                 />
               )}
             </div>

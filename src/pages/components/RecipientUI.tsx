@@ -1,65 +1,77 @@
 type Props = {
-  sdpLocalDescription: string
+  // sdpLocalDescription: string
   sdpRemoteDescription: string
+  //
+  // getUserMedia: () => Promise<void>
+  // attachMediaToPeerConnection: () => void
+  // sendSDPOffer: () => void
+  // attachRemoteSDPOffer: () => Promise<void>
+  // createSDPAnswer: () => Promise<void>
   
-  getUserMedia: () => Promise<void>
-  attachMediaToPeerConnection: () => void
-  sendSDPOffer: () => void
-  attachRemoteSDPOffer: () => Promise<void>
-  createSDPAnswer: () => Promise<void>
+  acceptCall: () => void
 }
 
 const RecipientUi = ({
-                       sdpLocalDescription,
+                       // sdpLocalDescription,
                        sdpRemoteDescription,
                        
-                       getUserMedia,
-                       attachMediaToPeerConnection,
-                       sendSDPOffer,
-                       attachRemoteSDPOffer,
-                       createSDPAnswer,
+                       // getUserMedia,
+                       // attachMediaToPeerConnection,
+                       // sendSDPOffer,
+                       // attachRemoteSDPOffer,
+                       // createSDPAnswer,
+                       
+                       acceptCall
                      }: Props) => {
   const steps = [
     {
       number: 1,
-      title: "Receive Offer",
-      description: "Accept incoming connection offer",
-      action: attachRemoteSDPOffer,
+      title: "Принять",
+      // description: "Accept incoming connection offer",
+      action: acceptCall,
       // icon: <UserCheck className="w-4 h-4" />,
-      disabled: false,
-    },
-    {
-      number: 2,
-      title: "Capture Media",
-      description: "Access camera and microphone",
-      action: getUserMedia,
-      // icon: <Phone className="w-4 h-4" />,
       disabled: !sdpRemoteDescription,
     },
-    {
-      number: 3,
-      title: "Attach Media",
-      description: "Connect media to peer connection",
-      action: attachMediaToPeerConnection,
-      // icon: <Headphones className="w-4 h-4" />,
-      disabled: !sdpRemoteDescription,
-    },
-    {
-      number: 4,
-      title: "Create Answer",
-      description: "Generate SDP answer response",
-      action: createSDPAnswer,
-      // icon: <FileText className="w-4 h-4" />,
-      disabled: !sdpRemoteDescription,
-    },
-    {
-      number: 5,
-      title: "Send Answer",
-      description: "Transmit answer to remote peer",
-      action: sendSDPOffer,
-      // icon: <Send className="w-4 h-4" />,
-      disabled: !sdpLocalDescription,
-    },
+    // {
+    //   number: 1,
+    //   title: "Receive Offer",
+    //   description: "Accept incoming connection offer",
+    //   action: attachRemoteSDPOffer,
+    //   // icon: <UserCheck className="w-4 h-4" />,
+    //   disabled: false,
+    // },
+    // {
+    //   number: 2,
+    //   title: "Capture Media",
+    //   description: "Access camera and microphone",
+    //   action: getUserMedia,
+    //   // icon: <Phone className="w-4 h-4" />,
+    //   disabled: !sdpRemoteDescription,
+    // },
+    // {
+    //   number: 3,
+    //   title: "Attach Media",
+    //   description: "Connect media to peer connection",
+    //   action: attachMediaToPeerConnection,
+    //   // icon: <Headphones className="w-4 h-4" />,
+    //   disabled: !sdpRemoteDescription,
+    // },
+    // {
+    //   number: 4,
+    //   title: "Create Answer",
+    //   description: "Generate SDP answer response",
+    //   action: createSDPAnswer,
+    //   // icon: <FileText className="w-4 h-4" />,
+    //   disabled: !sdpRemoteDescription,
+    // },
+    // {
+    //   number: 5,
+    //   title: "Send Answer",
+    //   description: "Transmit answer to remote peer",
+    //   action: sendSDPOffer,
+    //   // icon: <Send className="w-4 h-4" />,
+    //   disabled: !sdpLocalDescription,
+    // },
   ]
   
   return (
@@ -81,19 +93,19 @@ const RecipientUi = ({
             }`}
           >
             <div className="flex items-center gap-3">
-              <div
-                className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                  step.disabled ? "bg-gray-300" : "bg-purple-600"
-                }`}
-              >
-                <span className="text-white text-sm font-bold">{step.number}</span>
-              </div>
+              {/*<div*/}
+              {/*  className={`flex items-center justify-center w-8 h-8 rounded-full ${*/}
+              {/*    step.disabled ? "bg-gray-300" : "bg-purple-600"*/}
+              {/*  }`}*/}
+              {/*>*/}
+              {/*  /!*<span className="text-white text-sm font-bold">{step.number}</span>*!/*/}
+              {/*</div>*/}
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   {/*{step.icon}*/}
                   <span className="font-medium">{step.title}</span>
                 </div>
-                <p className="text-sm opacity-75">{step.description}</p>
+                {/*<p className="text-sm opacity-75">{step.description}</p>*/}
               </div>
             </div>
           </button>

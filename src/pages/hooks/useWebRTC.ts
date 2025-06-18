@@ -1,6 +1,11 @@
 import {useEffect, useRef, useState} from "react";
 import useWebRTCStatuses from "#root/src/pages/hooks/useWebRTCStatuses";
 
+const STATISTIC_TYPES = [
+  'candidate-pair', 'certificate', 'codec', 'data-channel', 'local-candidate', 'media-source', 'peer-connection', 'remote-candidate', 'transport',
+  'inbound-rtp', 'outbound-rtp', 'remote-inbound-rtp', 'remote-outbound-rtp'
+] as const
+
 const useWebRTC = () => {
   const localVideoRef = useRef<HTMLVideoElement | null>(null);
   const localMediaStreamRef = useRef<MediaStream | null>(null);
@@ -14,6 +19,7 @@ const useWebRTC = () => {
   const [sdpLocalDescriptionType, setSdpLocalDescriptionType] = useState(''); // aka sdpAnswerType
   const [sdpRemoteDescription, setSdpRemoteDescription] = useState('');
   const [sdpRemoteDescriptionType, setSdpRemoteDescriptionType] = useState<RTCSdpType>('offer');
+  const [statistics, setStatistics] = useState<Record<string, (Record<string, string> | string)[]> | null>(null)
   
   const {
     pcTrackState,
@@ -148,18 +154,30 @@ const useWebRTC = () => {
     console.log('RTCPeerConnection Answer successfully created and added to RTCPeerConnection');
   }
   
-  const copySDPOffer = async () => {
-    try {
-      await navigator.clipboard.writeText(sdpLocalDescription)
-    } catch (e) {
-      return console.error('Error while copying SDP offer >>> ', e);
-    }
-    console.log('Message attached to clipboard')
-  }
-  
   const sendMessage = () => {
     console.log('Tying to send message... ')
     dataChannelRef.current?.send('lol')
+  }
+  
+  const getStatistics = async () => {
+    try {
+      if (!peerConnectionRef.current) return console.error('RTCPeerConnection is not created');
+      const stats = await peerConnectionRef.current.getStats()
+      const rtcStats: Record<string, Record<string, string>[]> = {}
+      stats.forEach((report) => {
+        const t: (Record<string, string> | string)[] | undefined  = rtcStats[report.type]
+        const isComplex = ['inbound-rtp', 'outbound-rtp', 'remote-inbound-rtp', 'remote-outbound-rtp'].includes(report.type)
+        const preparedReport = isComplex ? JSON.stringify(report) : report
+        if (!t) {
+          rtcStats[report.type] = [preparedReport]
+        } else {
+          rtcStats[report.type].push(preparedReport)
+        }
+      })
+      setStatistics(rtcStats)
+    } catch (e) {
+      console.error('Error while getStatistics error >>> ', e);
+    }
   }
   
   return {
@@ -182,13 +200,15 @@ const useWebRTC = () => {
     setStartVideo,
     setStartAudio,
     
+    statistics,
+    getStatistics,
+    
     getUserMedia,
     attachMediaToPeerConnection,
     createDataChannel,
     createSDPOffer,
     attachRemoteSDPOffer,
     createSDPAnswer,
-    copySDPOffer,
     sendMessage
   }
 }

@@ -30,7 +30,7 @@ const Video = ({ localVideoRef, remoteVideoRef, personalId, acceptCall, sdpRemot
           key={step.number}
           onClick={step.action}
           disabled={step.disabled}
-          className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left mt-6 ${
+          className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left mb-6 ${
             step.disabled
               ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
               : "border-purple-200 bg-purple-50 hover:bg-purple-100 hover:border-purple-300 text-purple-800 hover:shadow-md"

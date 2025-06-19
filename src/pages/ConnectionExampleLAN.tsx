@@ -42,10 +42,10 @@ const ManualWebRTC = () => {
     sendMessage,
   } = useWebRTC()
   
-  const {sendWSMessage, isOpen, personalId, sdpIncomingMessage} = useWebSocket('wss://vududu.com:443/signaling')
-  // const { sendWSMessage, isOpen, personalId, sdpIncomingMessage } = useWebSocket("ws://localhost:8000/signaling")
+  // const {sendWSMessage, isOpen, personalId, sdpIncomingMessage} = useWebSocket('wss://vududu.com:443/signaling')
+  const { sendWSMessage, isOpen, personalId, sdpIncomingMessage } = useWebSocket("ws://localhost:56565/signaling")
   
-  const [isRecipientDevice, setIsRecipientDevice] = useState(false)
+  const [isRecipientDevice, setIsRecipientDevice] = useState(true)
   const [targetId, setTargetId] = useState('')
   
   const sendSdpMessage = () => {
@@ -166,6 +166,18 @@ const ManualWebRTC = () => {
         
         {/* Main Content */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+          {/* Video Section */}
+          <div className="xl:col-span-1">
+            <Video
+              localVideoRef={localVideoRef}
+              remoteVideoRef={remoteVideoRef}
+              personalId={personalId}
+              sdpRemoteDescription={sdpRemoteDescription}
+              acceptCall={acceptCall}
+              isRecipientUi={isRecipientDevice}
+            />
+          </div>
+          
           {/* Control Panel */}
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
@@ -216,11 +228,6 @@ const ManualWebRTC = () => {
                 />
               )}
             </div>
-          </div>
-          
-          {/* Video Section */}
-          <div className="xl:col-span-1">
-            <Video localVideoRef={localVideoRef} remoteVideoRef={remoteVideoRef} />
           </div>
           
           {/* Session Description */}

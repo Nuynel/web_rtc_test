@@ -81,35 +81,35 @@ const RecipientUi = ({
         Recipient Steps
       </h3>
       <div className="space-y-3">
-        {steps.map((step) => (
-          <button
-            key={step.number}
-            onClick={step.action}
-            disabled={step.disabled}
-            className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-              step.disabled
-                ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"
-                : "border-purple-200 bg-purple-50 hover:bg-purple-100 hover:border-purple-300 text-purple-800 hover:shadow-md"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              {/*<div*/}
-              {/*  className={`flex items-center justify-center w-8 h-8 rounded-full ${*/}
-              {/*    step.disabled ? "bg-gray-300" : "bg-purple-600"*/}
-              {/*  }`}*/}
-              {/*>*/}
-              {/*  /!*<span className="text-white text-sm font-bold">{step.number}</span>*!/*/}
-              {/*</div>*/}
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  {/*{step.icon}*/}
-                  <span className="font-medium">{step.title}</span>
-                </div>
-                {/*<p className="text-sm opacity-75">{step.description}</p>*/}
-              </div>
-            </div>
-          </button>
-        ))}
+        {/*{steps.map((step) => (*/}
+        {/*  <button*/}
+        {/*    key={step.number}*/}
+        {/*    onClick={step.action}*/}
+        {/*    disabled={step.disabled}*/}
+        {/*    className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${*/}
+        {/*      step.disabled*/}
+        {/*        ? "border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed"*/}
+        {/*        : "border-purple-200 bg-purple-50 hover:bg-purple-100 hover:border-purple-300 text-purple-800 hover:shadow-md"*/}
+        {/*    }`}*/}
+        {/*  >*/}
+        {/*    <div className="flex items-center gap-3">*/}
+        {/*      /!*<div*!/*/}
+        {/*      /!*  className={`flex items-center justify-center w-8 h-8 rounded-full ${*!/*/}
+        {/*      /!*    step.disabled ? "bg-gray-300" : "bg-purple-600"*!/*/}
+        {/*      /!*  }`}*!/*/}
+        {/*      /!*>*!/*/}
+        {/*      /!*  /!*<span className="text-white text-sm font-bold">{step.number}</span>*!/*!/*/}
+        {/*      /!*</div>*!/*/}
+        {/*      <div className="flex-1">*/}
+        {/*        <div className="flex items-center gap-2 mb-1">*/}
+        {/*          /!*{step.icon}*!/*/}
+        {/*          <span className="font-medium">{step.title}</span>*/}
+        {/*        </div>*/}
+        {/*        /!*<p className="text-sm opacity-75">{step.description}</p>*!/*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  </button>*/}
+        {/*))}*/}
       </div>
     </div>
   )

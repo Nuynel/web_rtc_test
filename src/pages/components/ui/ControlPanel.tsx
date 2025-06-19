@@ -33,49 +33,46 @@ const ControlPanel = ({
         <div className={clsx('w-5 h-5 rounded-full', isOpen ? ' bg-green-500' : 'bg-red-500')} />
         <span className="font-medium text-gray-700">WebSocket: {isOpen ? "Connected" : "Disconnected"}</span>
       </div>
-      <div className="flex items-center gap-2 text-sm text-gray-600">
-        {/*<User className="w-4 h-4" />*/}
-        <span>ID: {personalId || "Not assigned"}</span>
-      </div>
+      
     </div>
     
     {/* Media Controls */}
     <div className="space-y-4 mb-6">
-      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-        <div className="flex items-center gap-2">
-          <label className="font-medium text-gray-700">Audio</label>
-        </div>
-        <button
-          onClick={setStartAudio}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-            startAudio ? "bg-green-500" : "bg-gray-300"
-          }`}
-        >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      startAudio ? "translate-x-6" : "translate-x-1"
-                    }`}
-                  />
-        </button>
-      </div>
+      {/*<div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">*/}
+      {/*  <div className="flex items-center gap-2">*/}
+      {/*    <label className="font-medium text-gray-700">Audio</label>*/}
+      {/*  </div>*/}
+      {/*  <button*/}
+      {/*    onClick={setStartAudio}*/}
+      {/*    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${*/}
+      {/*      startAudio ? "bg-green-500" : "bg-gray-300"*/}
+      {/*    }`}*/}
+      {/*  >*/}
+      {/*            <span*/}
+      {/*              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${*/}
+      {/*                startAudio ? "translate-x-6" : "translate-x-1"*/}
+      {/*              }`}*/}
+      {/*            />*/}
+      {/*  </button>*/}
+      {/*</div>*/}
       
-      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-        <div className="flex items-center gap-2">
-          <label className="font-medium text-gray-700">Video</label>
-        </div>
-        <button
-          onClick={setStartVideo}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-            startVideo ? "bg-green-500" : "bg-gray-300"
-          }`}
-        >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      startVideo ? "translate-x-6" : "translate-x-1"
-                    }`}
-                  />
-        </button>
-      </div>
+      {/*<div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">*/}
+      {/*  <div className="flex items-center gap-2">*/}
+      {/*    <label className="font-medium text-gray-700">Video</label>*/}
+      {/*  </div>*/}
+      {/*  <button*/}
+      {/*    onClick={setStartVideo}*/}
+      {/*    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${*/}
+      {/*      startVideo ? "bg-green-500" : "bg-gray-300"*/}
+      {/*    }`}*/}
+      {/*  >*/}
+      {/*            <span*/}
+      {/*              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${*/}
+      {/*                startVideo ? "translate-x-6" : "translate-x-1"*/}
+      {/*              }`}*/}
+      {/*            />*/}
+      {/*  </button>*/}
+      {/*</div>*/}
       
       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
         <label className="font-medium text-gray-700">Device Role</label>

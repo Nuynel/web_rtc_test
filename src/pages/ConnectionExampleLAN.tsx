@@ -24,6 +24,7 @@ const ManualWebRTC = () => {
     
     pcTrackState,
     pcSignalingState,
+    iceConnectionState,
     
     startVideo,
     startAudio,
@@ -235,6 +236,7 @@ const ManualWebRTC = () => {
             <SessionDescription
               pcTrackState={pcTrackState}
               pcSignalingState={pcSignalingState}
+              iceConnectionState={iceConnectionState}
               sdpLocalDescription={sdpLocalDescription}
               sdpLocalDescriptionType={sdpLocalDescriptionType}
               sdpRemoteDescription={sdpRemoteDescription}

@@ -36,6 +36,7 @@ const useWebRTC = () => {
   const {
     pcTrackState,
     pcSignalingState,
+    iceConnectionState,
     
     startVideo,
     startAudio,
@@ -43,7 +44,8 @@ const useWebRTC = () => {
     setStartAudio,
     
     setPcTrackState,
-    handleSignalingStateChange
+    handleSignalingStateChange,
+    handleICEConnectionStateChange
   } = useWebRTCStatuses()
   
   function handleLocalCandidatesGathering (this: RTCPeerConnection, event: RTCPeerConnectionIceEvent) {
@@ -72,6 +74,7 @@ const useWebRTC = () => {
     console.log('RTCPeerConnection instance was created in useEffect');
     
     peerConnectionRef.current.onsignalingstatechange = handleSignalingStateChange
+    peerConnectionRef.current.oniceconnectionstatechange = handleICEConnectionStateChange
     peerConnectionRef.current.onicecandidate = handleLocalCandidatesGathering;
     peerConnectionRef.current.ontrack = handleRemoteTrackAttaching;
     
@@ -208,6 +211,7 @@ const useWebRTC = () => {
     
     pcTrackState,
     pcSignalingState,
+    iceConnectionState,
     
     startVideo,
     startAudio,

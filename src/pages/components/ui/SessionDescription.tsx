@@ -3,6 +3,7 @@
 type Props = {
   pcTrackState: boolean
   pcSignalingState: string | null
+  iceConnectionState: string | null
   sdpLocalDescription: string
   sdpLocalDescriptionType: string
   sdpRemoteDescription: string
@@ -12,6 +13,7 @@ type Props = {
 const SessionDescription = ({
                               pcTrackState,
                               pcSignalingState,
+                              iceConnectionState,
                               sdpLocalDescription,
                               sdpLocalDescriptionType,
                               sdpRemoteDescription,
@@ -53,6 +55,17 @@ const SessionDescription = ({
           <div className="flex items-center gap-2">
             <div className={`w-3 h-3 rounded-full ${pcTrackState ? "bg-green-500" : "bg-red-500"}`} />
             <span className="font-medium">Media Track {pcTrackState ? "Connected" : "Disconnected"}</span>
+          </div>
+        </div>
+        
+        <div
+          className={`p-4 rounded-xl border-2 ${
+            iceConnectionState ? "bg-green-50 border-green-200 text-green-800" : "bg-red-50 border-red-200 text-red-800"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <div className={`w-3 h-3 rounded-full ${iceConnectionState ? "bg-green-500" : "bg-red-500"}`} />
+            <span className="font-medium">Media Track {iceConnectionState || 'unsetted'}</span>
           </div>
         </div>
         

@@ -65,7 +65,7 @@ const useWebRTC = () => {
   
   // 0. The caller creates RTCPeerConnection
   useEffect(() => {
-    const peerConnection = new RTCPeerConnection({ iceServers });
+    const peerConnection = new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' });
     peerConnectionRef.current = peerConnection;
     console.log('RTCPeerConnection instance was created in useEffect');
     

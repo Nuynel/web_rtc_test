@@ -65,7 +65,7 @@ const SessionDescription = ({
         >
           <div className="flex items-center gap-2">
             <div className={`w-3 h-3 rounded-full ${iceConnectionState ? "bg-green-500" : "bg-red-500"}`} />
-            <span className="font-medium">Media Track {iceConnectionState || 'unsetted'}</span>
+            <span className="font-medium">ICE Connection State {iceConnectionState || 'unsetted'}</span>
           </div>
         </div>
         

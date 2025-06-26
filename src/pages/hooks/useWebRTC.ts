@@ -67,8 +67,8 @@ const useWebRTC = () => {
   
   // 0. The caller creates RTCPeerConnection
   useEffect(() => {
-    const peerConnection = new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' });
-    // const peerConnection = new RTCPeerConnection({ iceServers });
+    // const peerConnection = new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' });
+    const peerConnection = new RTCPeerConnection({ iceServers });
     
     peerConnectionRef.current = peerConnection;
     console.log('RTCPeerConnection instance was created in useEffect');
@@ -85,8 +85,16 @@ const useWebRTC = () => {
       dc.onmessage = (e) => console.log("📩 Сообщение:", e.data);
     };
     
+    const iceIntervalId = setInterval(() => {
+      if (peerConnectionRef.current?.iceConnectionState === 'connected') {
+        console.log('⚙️ Restarting ICE proactively to refresh allocation');
+        peerConnectionRef.current.restartIce();
+      }
+    }, 5 * 60 * 1000);
+    
     return () => {
       peerConnectionRef.current?.close();
+      clearInterval(iceIntervalId);
     }
   }, [])
   

@@ -40,14 +40,16 @@ const ManualWebRTC = () => {
     createSDPOffer,
     attachRemoteSDPOffer,
     createSDPAnswer,
-    sendMessage,
+    
+    isRecipientDevice,
+    setIsRecipientDevice
   } = useWebRTC()
   
   const {sendWSMessage, isOpen, personalId, sdpIncomingMessage} = useWebSocket('wss://vududu.com:443/signaling')
   // const { sendWSMessage, isOpen, personalId, sdpIncomingMessage } = useWebSocket("ws://localhost:56565/signaling")
   
-  const [isRecipientDevice, setIsRecipientDevice] = useState(true)
   const [targetId, setTargetId] = useState('')
+  const [isInitialized, setIsInitialized] = useState(false)
   
   const sendSdpMessage = () => {
     sendWSMessage({
@@ -74,6 +76,7 @@ const ManualWebRTC = () => {
       await getUserMedia()
       attachMediaToPeerConnection()
       await createSDPAnswer()
+      setIsInitialized(true)
     } catch (e) {
       console.error(e)
     }
@@ -96,6 +99,7 @@ const ManualWebRTC = () => {
   
   useEffect(() => {
     if (!isRecipientDevice) attachRemoteSDPOffer().catch(e => console.error(e))
+    if (isInitialized) acceptCall().catch(e => console.error(e))
   }, [sdpRemoteDescription]);
   
   const StatsBlock = () => {

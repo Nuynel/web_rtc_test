@@ -27,6 +27,7 @@ const useWebRTC = () => {
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
   const dataChannelRef = useRef<RTCDataChannel | null>(null)
   
+  const [isRecipientDevice, setIsRecipientDevice] = useState(true)
   const [sdpLocalDescription, setSdpLocalDescription] = useState(''); // aka sdpAnswer
   const [sdpLocalDescriptionType, setSdpLocalDescriptionType] = useState(''); // aka sdpAnswerType
   const [sdpRemoteDescription, setSdpRemoteDescription] = useState('');
@@ -65,6 +66,19 @@ const useWebRTC = () => {
     }
   }
   
+  const restartICEWithNegotiation = async () => {
+    if (!peerConnectionRef.current) return console.error('RTCPeerConnection is not created');
+    if (isRecipientDevice) return;
+    try {
+      const offer = await peerConnectionRef.current.createOffer({ iceRestart: true });
+      await peerConnectionRef.current.setLocalDescription(offer);
+      
+      console.log("🌀 ICE restart: offer создан и установлен как localDescription");
+    } catch (e) {
+      console.error("❌ Ошибка при ICE restart:", e);
+    }
+  };
+  
   // 0. The caller creates RTCPeerConnection
   useEffect(() => {
     // const peerConnection = new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' });
@@ -77,6 +91,7 @@ const useWebRTC = () => {
     peerConnectionRef.current.oniceconnectionstatechange = handleICEConnectionStateChange
     peerConnectionRef.current.onicecandidate = handleLocalCandidatesGathering;
     peerConnectionRef.current.ontrack = handleRemoteTrackAttaching;
+    peerConnectionRef.current.onnegotiationneeded = restartICEWithNegotiation;
     
     peerConnectionRef.current.ondatachannel = (event) => {
       const dc = event.channel;
@@ -235,7 +250,11 @@ const useWebRTC = () => {
     createSDPOffer,
     attachRemoteSDPOffer,
     createSDPAnswer,
-    sendMessage
+    restartICEWithNegotiation,
+    sendMessage,
+    
+    isRecipientDevice,
+    setIsRecipientDevice
   }
 }
 

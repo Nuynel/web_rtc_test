@@ -91,7 +91,6 @@ const useWebRTC = () => {
     peerConnectionRef.current.oniceconnectionstatechange = handleICEConnectionStateChange
     peerConnectionRef.current.onicecandidate = handleLocalCandidatesGathering;
     peerConnectionRef.current.ontrack = handleRemoteTrackAttaching;
-    peerConnectionRef.current.onnegotiationneeded = restartICEWithNegotiation;
     
     peerConnectionRef.current.ondatachannel = (event) => {
       const dc = event.channel;
@@ -112,6 +111,14 @@ const useWebRTC = () => {
       clearInterval(iceIntervalId);
     }
   }, [])
+  
+  useEffect(() => {
+    if (!peerConnectionRef.current) return;
+    peerConnectionRef.current.addEventListener("negotiationneeded", restartICEWithNegotiation)
+    return () => {
+      peerConnectionRef.current?.removeEventListener("negotiationneeded", restartICEWithNegotiation)
+    }
+  }, [isRecipientDevice]);
   
   // 1. The caller captures local Media via MediaDevices.getUserMedia
   const getUserMedia = async () => {
@@ -250,7 +257,6 @@ const useWebRTC = () => {
     createSDPOffer,
     attachRemoteSDPOffer,
     createSDPAnswer,
-    restartICEWithNegotiation,
     sendMessage,
     
     isRecipientDevice,

@@ -2,15 +2,18 @@ import {useEffect, useRef, useState} from "react";
 
 type sdpMessage = {
   id: string;
-  type: RTCSdpType | 'init';
+  type: RTCSdpType | 'init' | 'update' | 'reject' | 'update_nickname';
   description?: string;
+  ids?: {id: string, nickname: string}[],
 }
 
 const useWebSocket = (url: string) => {
   const ws = useRef<WebSocket | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
   const [sdpIncomingMessage, setSdpIncomingMessage] = useState<sdpMessage | null>(null);
   const [personalId, setPersonalId] = useState<string | null>(null);
+  const [ids, setIds] = useState<{id: string, nickname: string}[]>([]);
   
   useEffect(() => {
     console.log(url)
@@ -24,8 +27,19 @@ const useWebSocket = (url: string) => {
     ws.current.onmessage = (event) => {
       const message: sdpMessage = JSON.parse(event.data);
       console.log('[WebSocket] Тип сообщения:', message.type);
-      if (message.type === 'init' && message.id) return setPersonalId(message.id);
-      setSdpIncomingMessage(message);
+      if (message.type === 'init' && message.id) {
+        setIds(message.ids || [])
+        return setPersonalId(message.id);
+      }
+      if (message.type === 'update') {
+        setIds(message.ids || [])
+      }
+      if (message.type === 'reject') {
+        setIsRejected(true)
+      }
+      setSdpIncomingMessage(message); {
+        console.log('Updated ids:', message)
+      }
     };
     
     ws.current.onclose = () => {
@@ -51,7 +65,7 @@ const useWebSocket = (url: string) => {
     }
   };
   
-  return { sendWSMessage, isOpen, personalId, sdpIncomingMessage };
+  return { sendWSMessage, isOpen, personalId, sdpIncomingMessage, setSdpIncomingMessage, ids, isRejected, setIsRejected };
 }
 
 export default useWebSocket;

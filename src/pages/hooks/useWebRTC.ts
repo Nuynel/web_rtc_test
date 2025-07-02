@@ -33,6 +33,9 @@ const useWebRTC = () => {
   const [sdpRemoteDescription, setSdpRemoteDescription] = useState('');
   const [sdpRemoteDescriptionType, setSdpRemoteDescriptionType] = useState<RTCSdpType>('offer');
   const [statistics, setStatistics] = useState<Record<string, (Record<string, string> | string)[]> | null>(null)
+  const [iceIntervalId, setIceIntervalId] = useState<NodeJS.Timeout | null>(null)
+  
+  const [restartWebRTC, setRestartWebRTC] = useState(false)
   
   const {
     pcTrackState,
@@ -48,6 +51,24 @@ const useWebRTC = () => {
     handleSignalingStateChange,
     handleICEConnectionStateChange
   } = useWebRTCStatuses()
+  
+  const resetState = () => {
+    // localVideoRef.current = null
+    localMediaStreamRef.current = null
+    // remoteVideoRef.current = null
+    peerConnectionRef.current = null
+    dataChannelRef.current = null
+    
+    setIsRecipientDevice(true)
+    setSdpLocalDescription('')
+    setSdpLocalDescriptionType('')
+    setSdpRemoteDescription('')
+    setSdpRemoteDescriptionType('offer')
+    setStatistics(null)
+    setIceIntervalId(null)
+    
+    setRestartWebRTC(true)
+  }
   
   function handleLocalCandidatesGathering (this: RTCPeerConnection, event: RTCPeerConnectionIceEvent) {
     console.log('ICE Candidate >>> ', event.candidate?.candidate)
@@ -81,36 +102,46 @@ const useWebRTC = () => {
   
   // 0. The caller creates RTCPeerConnection
   useEffect(() => {
-    // const peerConnection = new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' });
-    const peerConnection = new RTCPeerConnection({ iceServers });
-    
-    peerConnectionRef.current = peerConnection;
-    console.log('RTCPeerConnection instance was created in useEffect');
-    
-    peerConnectionRef.current.onsignalingstatechange = handleSignalingStateChange
-    peerConnectionRef.current.oniceconnectionstatechange = handleICEConnectionStateChange
-    peerConnectionRef.current.onicecandidate = handleLocalCandidatesGathering;
-    peerConnectionRef.current.ontrack = handleRemoteTrackAttaching;
-    
-    peerConnectionRef.current.ondatachannel = (event) => {
-      const dc = event.channel;
-      console.log("📡 Получен dataChannel:", dc.label);
-      dc.onopen = () => console.log("✅ Открыт dataChannel на стороне реципиента");
-      dc.onmessage = (e) => console.log("📩 Сообщение:", e.data);
-    };
-    
-    const iceIntervalId = setInterval(() => {
-      if (peerConnectionRef.current?.iceConnectionState === 'connected') {
-        console.log('⚙️ Restarting ICE proactively to refresh allocation');
-        peerConnectionRef.current.restartIce();
+    if (!peerConnectionRef.current || restartWebRTC) {
+      const peerConnection = new RTCPeerConnection({ iceServers });
+      
+      peerConnectionRef.current = peerConnection;
+      console.log('RTCPeerConnection instance was created in useEffect');
+      
+      peerConnectionRef.current.onsignalingstatechange = handleSignalingStateChange
+      peerConnectionRef.current.oniceconnectionstatechange = handleICEConnectionStateChange
+      peerConnectionRef.current.onicecandidate = handleLocalCandidatesGathering;
+      peerConnectionRef.current.ontrack = handleRemoteTrackAttaching;
+      
+      peerConnectionRef.current.ondatachannel = (event) => {
+        const dc = event.channel;
+        console.log("📡 Получен dataChannel:", dc.label);
+        dc.onopen = () => console.log("✅ Открыт dataChannel на стороне реципиента");
+        dc.onmessage = (e) => console.log("📩 Сообщение:", e.data);
+      };
+      
+      const currIceIntervalId = setInterval(() => {
+        if (peerConnectionRef.current?.iceConnectionState === 'connected') {
+          console.log('⚙️ Restarting ICE proactively to refresh allocation');
+          peerConnectionRef.current.restartIce();
+        }
+      }, 5 * 60 * 1000);
+      
+      setIceIntervalId(currIceIntervalId);
+      
+      setRestartWebRTC(false)
+      
+      return () => {
+        peerConnectionRef.current?.close();
+        peerConnectionRef.current = null
+        if (iceIntervalId) clearInterval(iceIntervalId);
       }
-    }, 5 * 60 * 1000);
-    
-    return () => {
-      peerConnectionRef.current?.close();
-      clearInterval(iceIntervalId);
     }
-  }, [])
+  }, [restartWebRTC])
+  
+  // useEffect(() => {
+  //   if (iceConnectionState === 'disconnected')
+  // }, [iceConnectionState])
   
   useEffect(() => {
     if (!peerConnectionRef.current) return;
@@ -118,7 +149,7 @@ const useWebRTC = () => {
     return () => {
       peerConnectionRef.current?.removeEventListener("negotiationneeded", restartICEWithNegotiation)
     }
-  }, [isRecipientDevice]);
+  }, [isRecipientDevice, peerConnectionRef.current]);
   
   // 1. The caller captures local Media via MediaDevices.getUserMedia
   const getUserMedia = async () => {
@@ -144,6 +175,7 @@ const useWebRTC = () => {
   
   // 3. The caller creates RTCPeerConnection.createDataChannel()
   const createDataChannel = () => {
+    console.log(111, peerConnectionRef.current, dataChannelRef.current)
     if (!peerConnectionRef.current) return console.error('RTCPeerConnection is not created');
     dataChannelRef.current = peerConnectionRef.current.createDataChannel('myChannel')
     console.log('RTCDataChannel instance was created in useEffect');
@@ -158,6 +190,7 @@ const useWebRTC = () => {
     
     dataChannelRef.current.onclose = () => {
       console.log("datachannel close");
+      cancelCall()
     };
   }
   
@@ -201,6 +234,15 @@ const useWebRTC = () => {
     console.log('RTCPeerConnection Answer successfully created and added to RTCPeerConnection');
   }
   
+  const cancelCall = async () => {
+    localMediaStreamRef.current?.getTracks().forEach(track => track.stop());
+    peerConnectionRef.current?.close();
+    peerConnectionRef.current?.removeEventListener("negotiationneeded", restartICEWithNegotiation)
+    if (iceIntervalId) clearInterval(iceIntervalId);
+    if (dataChannelRef.current?.readyState !== 'closed') dataChannelRef.current?.close()
+    resetState()
+  }
+  
   const sendMessage = () => {
     console.log('Tying to send message... ')
     dataChannelRef.current?.send('lol')
@@ -238,6 +280,7 @@ const useWebRTC = () => {
     
     setSdpRemoteDescription,
     setSdpRemoteDescriptionType,
+    setSdpLocalDescription,
     
     pcTrackState,
     pcSignalingState,
@@ -260,7 +303,10 @@ const useWebRTC = () => {
     sendMessage,
     
     isRecipientDevice,
-    setIsRecipientDevice
+    setIsRecipientDevice,
+    
+    cancelCall,
+    restartWebRTC
   }
 }
 

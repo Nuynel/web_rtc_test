@@ -1,3 +1,3 @@
-import MainPage from "../../src/pages/ConnectionExampleLAN";
+import MainPage from "../../src/pages";
 
 export { MainPage as Page }

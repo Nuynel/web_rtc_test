@@ -186,7 +186,7 @@ const ManualWebRTC = () => {
         
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
           <div className="xl:col-span-1">
-            <div className="bg-gray-100 rounded-2xl shadow-xl border border-gray-200 p-6 mb-6 flex gap-6 items-center">
+            <div className="bg-gray-100 rounded-2xl shadow-xl border border-gray-200 p-6 mb-6 flex gap-6 items-center flex-wrap max-w-[100vw]">
               Nickname:
               <input
                 className="bg-white rounded-lg shadow-xl border border-gray-100 flex-grow p-2"

@@ -11,11 +11,13 @@ const Peer = ({id, nickname, startCall}: {id: string, nickname: string, startCal
   <div
     className='p-3 rounded-lg mb-4 bg-blue-100 border border-blue-200'
   >
-    <div className="font-medium items-center flex justify-between text-lg">
-      <span className=''>Peer ID: {' '+id}</span>
-      <span className=''>Peer Nickname: {' '+nickname}</span>
+    <div className="font-medium items-center flex justify-between text-lg flex-wrap gap-y-2">
+      <div>
+        <div className=''>Peer ID: {' '+id}</div>
+        <div className=''>Peer Nickname: {' '+(nickname || '-')}</div>
+      </div>
       <button
-        className="w-1/2 text-white font-medium py-3 px-4 bg-green-500 hover:bg-green-400 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+        className="w-full md:w-1/2 text-white font-medium py-3 px-4 bg-green-500 hover:bg-green-400 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
         onClick={startCall}
       >
         Call

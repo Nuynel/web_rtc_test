@@ -11,6 +11,7 @@ const useWebSocket = (url: string) => {
   const ws = useRef<WebSocket | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isRejected, setIsRejected] = useState(false);
+  const [isNicknameSet, setIsNicknameSet] = useState(false);
   const [sdpIncomingMessage, setSdpIncomingMessage] = useState<sdpMessage | null>(null);
   const [personalId, setPersonalId] = useState<string | null>(null);
   const [ids, setIds] = useState<{id: string, nickname: string}[]>([]);
@@ -36,6 +37,9 @@ const useWebSocket = (url: string) => {
       }
       if (message.type === 'reject') {
         setIsRejected(true)
+      }
+      if (message.type === 'update_nickname' && message.description === 'ok') {
+        setIsNicknameSet(true)
       }
       setSdpIncomingMessage(message); {
         console.log('Updated ids:', message)
@@ -65,7 +69,7 @@ const useWebSocket = (url: string) => {
     }
   };
   
-  return { sendWSMessage, isOpen, personalId, sdpIncomingMessage, setSdpIncomingMessage, ids, isRejected, setIsRejected };
+  return { sendWSMessage, isOpen, personalId, sdpIncomingMessage, setSdpIncomingMessage, ids, isRejected, setIsRejected, isNicknameSet };
 }
 
 export default useWebSocket;

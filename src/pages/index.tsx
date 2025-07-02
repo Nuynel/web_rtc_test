@@ -48,8 +48,18 @@ const ManualWebRTC = () => {
     restartWebRTC
   } = useWebRTC()
   
-  const {sendWSMessage, isOpen, personalId, sdpIncomingMessage, setSdpIncomingMessage, ids, isRejected, setIsRejected } = useWebSocket('wss://vududu.com:443/signaling')
-  // const { sendWSMessage, isOpen, personalId, sdpIncomingMessage, setSdpIncomingMessage, ids, isRejected, setIsRejected } = useWebSocket("ws://localhost:56565/signaling")
+  const {
+    sendWSMessage,
+    isOpen,
+    personalId,
+    sdpIncomingMessage,
+    setSdpIncomingMessage,
+    ids,
+    isRejected,
+    setIsRejected,
+    isNicknameSet
+  } = useWebSocket('wss://vududu.com:443/signaling')
+  // } = useWebSocket("ws://localhost:56565/signaling")
   
   const [targetId, setTargetId] = useState('')
   const [isInitialized, setIsInitialized] = useState(false)
@@ -157,7 +167,7 @@ const ManualWebRTC = () => {
   
   const CallAlert = () => (
     <div className='bg-white rounded-2xl w-1/3 z-20 p-4'>
-      Вызов от: <span className='text-gray-400'>{targetId}</span>
+      Вызов от: <span className='text-gray-400'>{targetId}, {ids.find(({id}) => id === targetId)?.nickname}</span>
       <div className='flex items-center justify-center gap-4 mt-4'>
         <button
           className="w-1/2 text-white font-medium py-3 px-4 bg-green-500 hover:bg-green-400 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
@@ -191,10 +201,12 @@ const ManualWebRTC = () => {
               <input
                 className="bg-white rounded-lg shadow-xl border border-gray-100 flex-grow p-2"
                 value={nickname}
+                readOnly={isNicknameSet}
                 onChange={(e) => setNickname(e.target.value)}
               />
               <button
-                className="text-white font-medium py-2 px-4 bg-green-500 hover:bg-green-400 rounded-lg transition-all duration-200 flex items-center justify-center"
+                className="text-white font-medium py-2 px-4 bg-green-500 hover:bg-green-400 disabled:bg-gray-400 rounded-lg transition-all duration-200 flex items-center justify-center"
+                disabled={isNicknameSet}
                 onClick={updateNickname}
               >Update nickname</button>
             </div>

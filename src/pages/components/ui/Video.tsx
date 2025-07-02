@@ -6,11 +6,9 @@ type Props = {
   personalId: string | null,
   
   sdpRemoteDescription: string
-  acceptCall: () => void
-  isRecipientUi: boolean
 }
 
-const Video = ({ localVideoRef, remoteVideoRef, personalId, acceptCall, sdpRemoteDescription, isRecipientUi }: Props) => {
+const Video = ({ localVideoRef, remoteVideoRef, personalId, sdpRemoteDescription }: Props) => {
   
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">

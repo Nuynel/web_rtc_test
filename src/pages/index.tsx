@@ -138,7 +138,7 @@ const ManualWebRTC = () => {
   
   useEffect(() => {
     if (!isRecipientDevice) attachRemoteSDPOffer().catch(e => console.error(e))
-    if (isInitialized) acceptCall().catch(e => console.error(e))
+    if (isInitialized && sdpRemoteDescription) acceptCall().catch(e => console.error(e))
   }, [sdpRemoteDescription]);
   
   const updateNickname = () => {
@@ -203,8 +203,6 @@ const ManualWebRTC = () => {
               remoteVideoRef={remoteVideoRef}
               personalId={personalId}
               sdpRemoteDescription={sdpRemoteDescription}
-              acceptCall={acceptCall}
-              isRecipientUi={isRecipientDevice}
             />
           </div>
           

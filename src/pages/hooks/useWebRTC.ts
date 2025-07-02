@@ -118,6 +118,7 @@ const useWebRTC = () => {
         console.log("📡 Получен dataChannel:", dc.label);
         dc.onopen = () => console.log("✅ Открыт dataChannel на стороне реципиента");
         dc.onmessage = (e) => console.log("📩 Сообщение:", e.data);
+        dc.onclose = cancelCall;
       };
       
       const currIceIntervalId = setInterval(() => {
@@ -138,10 +139,6 @@ const useWebRTC = () => {
       }
     }
   }, [restartWebRTC])
-  
-  // useEffect(() => {
-  //   if (iceConnectionState === 'disconnected')
-  // }, [iceConnectionState])
   
   useEffect(() => {
     if (!peerConnectionRef.current) return;
